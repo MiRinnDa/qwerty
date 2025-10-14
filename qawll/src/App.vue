@@ -7,7 +7,7 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <header>
-<h1>1 2 3 4 </h1>
+<h1>Тяп тяп тяп тяп</h1>
   </header>
 
   <RouterView />
@@ -21,7 +21,8 @@ header {
 
 .logo {
   display: block;
-  margin: 0 auto 2rem;
+  margin: 0
+   auto 2rem;
 }
 
 nav {
