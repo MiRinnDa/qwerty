@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>это абобут страница</h1>
+    <h1>это about страница</h1>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
   .about {
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
   }
 }
 </style>
