@@ -6,9 +6,10 @@ import HelloWorld from './components/HelloWorld.vue'
 
 
 <template>
-  <header>
-<h1>Тяп тяп тяп тяп</h1>
-  </header>
+
+<h1>
+  
+</h1>
 
   <RouterView />
 </template>
@@ -25,7 +26,7 @@ header {
    auto 2rem;
 }
 
-nav {
+/* nav {
   width: 100%;
   font-size: 12px;
   text-align: center;
@@ -48,7 +49,7 @@ nav a {
 
 nav a:first-of-type {
   border: 0;
-}
+} */
 
 @media (min-width: 1024px) {
   header {
