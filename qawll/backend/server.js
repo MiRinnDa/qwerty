@@ -64,7 +64,7 @@ app.get('/api/organization', (req, res) => {
         organization.name as organizationName,
         openingHours,
         adress,
-        numOfSeats
+        numOfHalls
     FROM organization
     `
     db.all(organizationApi, (err, rows) => {
