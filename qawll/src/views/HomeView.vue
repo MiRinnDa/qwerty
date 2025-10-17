@@ -8,7 +8,7 @@
     <div v-else-if="error">Ошибка: {{ error }}</div>
     <div v-else>
         <div v-if="receipt.length">
-            <div v-for="receipts in receipt" :key="receipts.id" class="receipt">
+            <div v-for="receipts in receipt" :key="receipts.id" class="receipt" style="margin-bottom: 30%;">
                 <h3>Дата:</h3> {{ receipts.data }}
                 <h3>Сеанс:</h3> {{ receipts.sessionName }}
                 <h3>Клиент:</h3> {{ receipts.customerName }}
