@@ -20,6 +20,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 });
 // 
 // API эндпоинты для ваших таблиц
+// Сессия
 app.get('/api/session', (req, res) => {
     const sessionApi = `
     SELECT 
@@ -28,7 +29,7 @@ app.get('/api/session', (req, res) => {
         filmDuration,
         hall.name, hall.numOfSeats
     FROM session
-    LEFT JOIN hall ON session.hall_id = session.id 
+    LEFT JOIN hall ON session.hall_id = hall.id 
     `
     db.all(sessionApi, (err, rows) => {
         if (err) {
@@ -39,8 +40,15 @@ app.get('/api/session', (req, res) => {
     });
 });
 
-app.get('/api/products', (req, res) => {
-    db.all('SELECT * FROM products', (err, rows) => {
+// Посетители
+app.get('/api/customers', (req, res) => {
+    const customersApi = `
+    SELECT 
+        customers.name as name,
+    customers.passportDetails
+    FROM customers
+    `
+    db.all(customersApi, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -49,25 +57,37 @@ app.get('/api/products', (req, res) => {
     });
 });
 
+// Организация
+app.get('/api/organization', (req, res) => {
+    const organizationApi = `
+    SELECT 
+        organization.name as organizationName,
+        openingHours,
+        adress,
+        numOfSeats
+    FROM organization
+    `
+    db.all(organizationApi, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(rows);
+    });
+});
+
+// Залы
 app.get('/api/hall', (req, res) => {
-    db.all('SELECT * FROM hall', (err, rows) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json(rows);
-    });
-});
-
-
-app.get('/api/orders', (req, res) => {
-    const query = `
-        SELECT o.*, c.name as customer_name, p.name as product_name 
-        FROM orders o
-        JOIN customers c ON o.customers_id = c.id
-        JOIN products p ON o.product_id = p.id
+    const hallApi = `
+    SELECT 
+        hall.name as hallName,
+        hall.numOfSeats,
+        hall.typeOfShowing,
+        organization.name as organizationName
+    FROM hall
+    LEFT JOIN organization ON hall.organization_id = organization.id
     `;
-    db.all(query, (err, rows) => {
+    db.all(hallApi, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -76,8 +96,18 @@ app.get('/api/orders', (req, res) => {
     });
 });
 
-app.get('/api/shops', (req, res) => {
-    db.all('SELECT * FROM shops', (err, rows) => {
+// Сотрудники
+app.get('/api/employee', (req, res) => {
+    const employeeApi = `
+    SELECT 
+        employee.name as employeeName,
+        employee.passportDetails,
+        employee.jobTitle,
+        organization.name as organizationName
+    FROM employee
+    LEFT JOIN organization ON employee.organization_id = organization.id
+    `;
+    db.all(employeeApi, (err, rows) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
@@ -85,6 +115,36 @@ app.get('/api/shops', (req, res) => {
         res.json(rows);
     });
 });
+
+// Чеки
+app.get('/api/receipt', (req, res) => {
+    const receiptApi = `
+    SELECT 
+        receipt.data,
+        session.name as sessionName,
+        customers.name as customerName,
+        hall.name as hallName,
+        organization.name as organizationName
+    FROM receipt
+    LEFT JOIN session ON receipt.session_id = session.id
+    LEFT JOIN customers ON receipt.customers_id = customers.id
+    LEFT JOIN hall ON receipt.hall_id = hall.id
+    LEFT JOIN organization ON receipt.organization_id = organization.id
+    `;
+    db.all(receiptApi, (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(rows);
+    });
+});
+
+
+
+// LEFT JOIN связанная_таблица ON текущая_таблица.внешний_ключ = связанная_таблица.первичный_ключ
+
+
 
 const PORT = 3001;
 app.listen(PORT, () => {

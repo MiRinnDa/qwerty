@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      Продукты
+      <!-- Продукты
       <div v-if="products.length">
         <h3>Продукты:</h3>
         <div v-for="product in products" :key="product.id">
@@ -31,7 +31,7 @@
         <div v-for="product in supplier" :key="product.id">
           {{ product.name }} - {{ product.product_type }}
         </div>
-      </div>
+      </div> -->
 
 
       
@@ -70,47 +70,47 @@ export default {
       }
     },
 
-        async fetchStaff() {
-      this.loading = true;
-      try {
-        const response = await axios.get('http://localhost:3001/api/products');
-        this.staff = response.data;
-      } catch (error) {
-        console.error('Ошибка загрузки сотрудников:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
+//         async fetchStaff() {
+//       this.loading = true;
+//       try {
+//         const response = await axios.get('http://localhost:3001/api/products');
+//         this.staff = response.data;
+//       } catch (error) {
+//         console.error('Ошибка загрузки сотрудников:', error);
+//       } finally {
+//         this.loading = false;
+//       }
+//     },
 
-    async fetchProducts() {
-      this.loading = true;
-      try {
-        const response = await axios.get('http://localhost:3001/api/products');
-        this.products = response.data;
-      } catch (error) {
-        console.error('Ошибка загрузки продуктов:', error);
-      } finally {
-        this.loading = false;
-      }
-    },
+//     async fetchProducts() {
+//       this.loading = true;
+//       try {
+//         const response = await axios.get('http://localhost:3001/api/products');
+//         this.products = response.data;
+//       } catch (error) {
+//         console.error('Ошибка загрузки продуктов:', error);
+//       } finally {
+//         this.loading = false;
+//       }
+//     },
 
-    async fetchOrders() {
-      this.loading = true;
-      try {
-        const response = await axios.get('http://localhost:3001/api/orders');
-        this.orders = response.data;
-      } catch (error) {
-        console.error('Ошибка загрузки заказов:', error);
-      } finally {
-        this.loading = false;
-      }
-    }
-  },
+//     async fetchOrders() {
+//       this.loading = true;
+//       try {
+//         const response = await axios.get('http://localhost:3001/api/orders');
+//         this.orders = response.data;
+//       } catch (error) {
+//         console.error('Ошибка загрузки заказов:', error);
+//       } finally {
+//         this.loading = false;
+//       }
+//     }
+   },
 
   mounted() {
-    // Автоматически загружаем данные при монтировании
-    this.fetchStaff();
-    this.fetchProducts();
+    // // Автоматически загружаем данные при монтировании
+    // this.fetchStaff();
+    // this.fetchProducts();
     this.fetchSession();
   }
 }
