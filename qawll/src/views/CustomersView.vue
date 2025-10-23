@@ -3,7 +3,7 @@
 
 
     <div class="add-customers">
-        <h2>Добавить нового посетителя</h2>
+        <h1>Добавить нового посетителя</h1>
         <form @submit.prevent="addCustomer">
             <input v-model="newCustomer.name" placeholder="Имя" :required>
             <input v-model="newCustomer.passportDetails" placeholder="Паспортные данные" required>
@@ -19,7 +19,7 @@
     <div v-else-if="error">Ошибка: {{ error }}</div>
     <div v-else>
         <div v-if="customers.length">
-            <div v-for="customers in customers" :key="customers.id" class="customers" style="margin-bottom: 30%;">
+            <div v-for="customers in customers" :key="customers.id" class="customers" style="margin-bottom: 30%; display: flex;">
                 <h3>Клиент:</h3> {{ customers.name }}
                 <h3>Паспортные данные:</h3> {{ customers.passportDetails }}
             </div>
@@ -86,4 +86,6 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
