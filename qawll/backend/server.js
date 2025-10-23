@@ -43,10 +43,11 @@ app.get('/api/session', (req, res) => {
 // Посетители
 app.get('/api/customers', (req, res) => {
     const customersApi = `
-    SELECT 
-        customers.name as name,
+SELECT 
+    customers.id,
+    customers.name as name,
     customers.passportDetails
-    FROM customers
+FROM customers
     `
     db.all(customersApi, (err, rows) => {
         if (err) {
@@ -54,6 +55,80 @@ app.get('/api/customers', (req, res) => {
             return;
         }
         res.json(rows);
+    });
+});
+
+app.post('/api/customers', (req, res) => {
+    const { name, passportDetails } = req.body;
+
+    if (!name || !passportDetails) {
+        return res.status(400).json({ error: 'Имя и паспортные данные обязательны' });
+    }
+
+    const sql = `INSERT INTO customers (name, passportDetails) VALUES (?, ?)`;
+    
+    db.run(sql, [name, passportDetails], function(err) {
+        if (err) {
+            console.error('Ошибка при добавлении посетителя:', err);
+            return res.status(500).json({ error: 'Ошибка базы данных' });
+        }
+        
+        // Возвращаем добавленного посетителя с ID
+        res.json({
+            id: this.lastID,
+            name: name,
+            passportDetails: passportDetails
+        });
+    });
+});
+
+
+// Удаление посетителя
+app.delete('/api/customers/:id', (req, res) => {
+    const { id } = req.params;
+    
+    const sql = `DELETE FROM customers WHERE id = ?`;
+    
+    db.run(sql, [id], function(err) {
+        if (err) {
+            console.error('Ошибка при удалении посетителя:', err);
+            return res.status(500).json({ error: 'Ошибка базы данных' });
+        }
+        
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Посетитель не найден' });
+        }
+        
+        res.json({ message: 'Посетитель успешно удален', id: id });
+    });
+});
+
+// Обновление посетителя
+app.put('/api/customers/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, passportDetails } = req.body;
+
+    if (!name || !passportDetails) {
+        return res.status(400).json({ error: 'Имя и паспортные данные обязательны' });
+    }
+
+    const sql = `UPDATE customers SET name = ?, passportDetails = ? WHERE id = ?`;
+    
+    db.run(sql, [name, passportDetails, id], function(err) {
+        if (err) {
+            console.error('Ошибка при обновлении посетителя:', err);
+            return res.status(500).json({ error: 'Ошибка базы данных' });
+        }
+        
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Посетитель не найден' });
+        }
+        
+        res.json({
+            id: parseInt(id),
+            name: name,
+            passportDetails: passportDetails
+        });
     });
 });
 
@@ -75,6 +150,8 @@ app.get('/api/organization', (req, res) => {
         res.json(rows);
     });
 });
+
+
 
 // Залы
 app.get('/api/hall', (req, res) => {
